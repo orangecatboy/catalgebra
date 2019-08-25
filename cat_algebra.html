@@ -1,38 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8"/>
 <script>
 
 
 
 
-function apollo(p){return "Apollo is the God of the Sun, the Light, the Music and Prophecy. "}
-function artimis(p){return " Artemis is the Greek Goddess of the Hunt, Forests and Hills, the Moon,  and Archery."+p*p*p*p*p}
 function artimis(p){return " Artemis is the Greek Goddess of the Hunt, Forests and Hills, the Moon,  and Archery."+p*p*p*p*p}
 
-
-
-
-
-
-
-
-
-function power(x,y){
-  o=1;
-  for(r=1; r<=y; r++){ o*=x }
-  return o
-
-}
-function mojo(d){return 54624563-66745767+d}
-function hugs(c){ return c*c*c*c-22 + c}
-function kiss(x) {console.log("i love mama and papa do not forget mummu x");}
-function meow(x) {console.log(`i love mama and papa do not forget mummu ${x}`);}
-function fall(f) {console.log(`sunny leaves are falli'n down `);}return x*x*x*x*x;
-function sad(e) {console.log("sssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaadddddddddd");}
-
-
-// Alex, your code goes in this <script> section:
 function triangular(x) {
   answer=0
   for (i=0; i<=x; i++) {
@@ -40,22 +16,174 @@ function triangular(x) {
   }
   return answer
 }
-function p0(x){return 1}
-function p1(x){return x}
-function p2(x){return x*x}
-function p3(x){return x*x*x}
-function p4(x){return x*x*x*x}
-function p5(x){return x*x*x*x*x}
-function p6(x){return x*x*x*x*x*x}
 
-// 10^4=10000
-// 10^3=1000
-// 10^2=100
-// 10^1=10
-// 10^0=1
+function power(α, β) {
+  answer = 1
+  for(i=0; i<β; i++) {
+    answer *= α
+  }
+  return answer
+}
+
+
+
+
+
+
+
+
+
 </script>
+
+<!-- ************************************************************
+     ************************************************************
+     ************************************************************
+     ************************************************************
+     ************************************************************
+     ************************************************************ -->
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<meta charset="utf-8"/>
+<script>
+var littleLisp = (function(exports) {
+  var library = {
+    first: function(x) {
+      return x[0];
+    },
+
+    rest: function(x) {
+      return x.slice(1);
+    },
+
+    print: function(x) {
+      console.log(x);
+      return x;
+    }
+  };
+
+  var Context = function(scope, parent) {
+    this.scope = scope;
+    this.parent = parent;
+
+    this.get = function(identifier) {
+      if (identifier in this.scope) {
+        return this.scope[identifier];
+      } else if (this.parent !== undefined) {
+        return this.parent.get(identifier);
+      }
+    };
+  };
+
+  var special = {
+    let: function(input, context) {
+      var letContext = input[1].reduce(function(acc, x) {
+        acc.scope[x[0].value] = interpret(x[1], context);
+        return acc;
+      }, new Context({}, context));
+
+      return interpret(input[2], letContext);
+    },
+
+    lambda: function(input, context) {
+      return function() {
+        var lambdaArguments = arguments;
+        var lambdaScope = input[1].reduce(function(acc, x, i) {
+          acc[x.value] = lambdaArguments[i];
+          return acc;
+        }, {});
+
+        return interpret(input[2], new Context(lambdaScope, context));
+      };
+    },
+
+    if: function(input, context) {
+      return interpret(input[1], context) ?
+        interpret(input[2], context) :
+        interpret(input[3], context);
+    }
+  };
+
+  var interpretList = function(input, context) {
+    if (input.length > 0 && input[0].value in special) {
+      return special[input[0].value](input, context);
+    } else {
+      var list = input.map(function(x) { return interpret(x, context); });
+      if (list[0] instanceof Function) {
+        return list[0].apply(undefined, list.slice(1));
+      } else {
+        return list;
+      }
+    }
+  };
+
+  var interpret = function(input, context) {
+    if (context === undefined) {
+      return interpret(input, new Context(library));
+    } else if (input instanceof Array) {
+      return interpretList(input, context);
+    } else if (input.type === "identifier") {
+      return context.get(input.value);
+    } else if (input.type === "number" || input.type === "string") {
+      return input.value;
+    }
+  };
+
+  var categorize = function(input) {
+    if (!isNaN(parseFloat(input))) {
+      return { type:'number', value: parseFloat(input) };
+    } else if (input[0] === '"' && input.slice(-1) === '"') {
+      return { type:'string', value: input.slice(1, -1) };
+    } else {
+      return { type:'identifier', value: input };
+    }
+  };
+
+  var parenthesize = function(input, list) {
+    if (list === undefined) {
+      return parenthesize(input, []);
+    } else {
+      var token = input.shift();
+      if (token === undefined) {
+        return list.pop();
+      } else if (token === "(") {
+        list.push(parenthesize(input, []));
+        return parenthesize(input, list);
+      } else if (token === ")") {
+        return list;
+      } else {
+        return parenthesize(input, list.concat(categorize(token)));
+      }
+    }
+  };
+
+  var tokenize = function(input) {
+    return input.split('"')
+                .map(function(x, i) {
+                   if (i % 2 === 0) { // not in string
+                     return x.replace(/\(/g, ' ( ')
+                             .replace(/\)/g, ' ) ');
+                   } else { // in string
+                     return x.replace(/ /g, "!whitespace!");
+                   }
+                 })
+                .join('"')
+                .trim()
+                .split(/\s+/)
+                .map(function(x) {
+                  return x.replace(/!whitespace!/g, " ");
+                });
+  };
+
+  var parse = function(input) {
+    return parenthesize(tokenize(input));
+  };
+
+  return {
+    parse: parse,
+    interpret: interpret
+  };
+})();
+
+</script>
 <title>Cat Algebra</title>
 <!--
 The 'link rel' below is the code for the cat favicon that appears up in the browser tab.
@@ -150,30 +278,8 @@ QiyMfeXpgDToZvhtp66uLmpsbGTaRBxMVFJSQmx6QpcLwB10N4gNpiF7zj+gA18j7Thg5XnGHjMj
 PN+BgYGUn58vKMBHTIgFuFsx5eXlImVdXZ1ZWVkxmgGQ9iOgGurojoYIoB1sQ0ODbRiBAOvgAxF8
 un5tfMlUcYXOC0mkQsDEKJUwL/4sAPiyNJqy+PUjJnPeeOMceO5wvcAoNDSU2OzEEUy9vb1CFr5j
 Yd/I4uPXHL8sIhKiV0MdT0pKsoHmTvKPs3yO+T9Yox+Xqk3I9QAAAABJRU5ErkJggg==">
-<img style="-webkit-user-select: none;cursor: zoom-in;" src="https://lovesvg.com/wp-content/uploads/2017/12/cat-and-dog-harmony-4906.png" width="545" height="545">
 </head>
 <body>
-<!-- original source for this cat image:
-https://commons.wikimedia.org/wiki/File:Cat_silhouette.svg
--->
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   version="1.0"
-   width="400"
-   height="380"
-   id="svg2">
-  <defs
-     id="defs5" />
-  <path00	05	41
-HR	MIN	SEC
-00	05	41
-HR	MIN	SEC
-
-     d="M 151.34904,307.20455 L 264.34904,307.20455 C 264.34904,291.14096 263.2021,287.95455 236.59904,287.95455 C 240.84904,275.20455 258.12424,244.35808 267.72404,244.35808 C 276.21707,244.35808 286.34904,244.82592 286.34904,264.20455 C 286.34904,286.20455 323.37171,321.67547 332.34904,307.20455 C 345.72769,285.63897 309.34904,292.21514 309.34904,240.20455 C 309.34904,169.05135 350.87417,179.18071 350.87417,139.20455 C 350.87417,119.20455 345.34904,116.50374 345.34904,102.20455 C 345.34904,83.30695 361.99717,84.403577 358.75805,68.734879 C 356.52061,57.911656 354.76962,49.23199 353.46516,36.143889 C 352.53959,26.857305 352.24452,16.959398 342.59855,17.357382 C 331.26505,17.824992 326.96549,37.77419 309.34904,39.204549 C 291.76851,40.631991 276.77834,24.238028 269.97404,26.579549 C 263.22709,28.901334 265.34904,47.204549 269.34904,60.204549 C 275.63588,80.636771 289.34904,107.20455 264.34904,111.20455 C 239.34904,115.20455 196.34904,119.20455 165.34904,160.20455 C 134.34904,201.20455 135.49342,249.3212 123.34904,264.20455 C 82.590696,314.15529 40.823919,293.64625 40.823919,335.20455 C 40.823919,353.81019 72.349045,367.20455 77.349045,361.20455 C 82.349045,355.20455 34.863764,337.32587 87.995492,316.20455 C 133.38711,298.16014 137.43914,294.47663 151.34904,307.20455 z "
-     style="fill:black;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="path1891" />
-</svg>
+<img style="-webkit-user-select: none;cursor: zoom-in;" src="https://lovesvg.com/wp-content/uploads/2017/12/cat-and-dog-harmony-4906.png" width="545" height="545">
 </body>
 </html>
