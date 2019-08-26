@@ -1,0 +1,1576 @@
+/**CHECK MY OTHER STUFF HERE**/
+    //bit.ly/ArrowheadCo
+
+/**SUB TO ME HERE**/
+    //bit.ly/SubToAC
+
+/*
+    Title               : Atomas (WIP)
+    Programmer          : Mo David
+    Date                : 30/01/2019
+    Date Finished-ish   : 03/02/2019, 11:17 PM
+*/
+
+/**
+
+Hope you guys enjoy!
+
+
+BTW THIS PROGRAM WAS SWAPPED WITH PVZ2
+
+
+This game is by Arrowhead Co.
+Based on the game Atomas by Sirnic.
+
+
+Save a spin-off if you want to be part of the leaderboard.
+
+**/
+
+var main = function(){
+smooth();
+textAlign(CENTER, CENTER);
+
+var username = "ENTER NAME".split("");
+var leaderboard = [
+    [
+        "This could be you",
+        "This could be you",
+        "This could be you",
+        "This could be you",
+    ],
+    [
+        "This could be you",
+        "This could be you",
+        "This could be you",
+        "This could be you",
+    ],
+    [
+        "This could be you",
+        "This could be you",
+        "This could be you",
+        "This could be you",
+    ],
+];
+
+//easy thumbnail-maker
+//{
+var thumbnail = 0;
+//}
+
+//fonts
+//{
+var A = createFont("trebuchet ms");
+var C = createFont("century gothic");
+var D = createFont("Dosis");
+var P = createFont("calibri");
+//}
+ 
+//this is for mousePressed and keyPressed functions
+//{
+var verify = 0;
+//}
+
+//some fixed game data
+//{
+var atomSize = 45, tableRad = (width/2-atomSize*3/2);
+var settings = [true, true, false], paused = false;
+var tutorial = 0, tCount = 0, tCount2 = 0, tDialogues = ["Tap between any two atoms to place another one.", "Place a plus atom between two similar atoms to combine them.", "Place a plus atom between a symmetrical series of atoms to combine them.", "To use a minus atom, tap on any other atom to absorb it.", "Alternatively tap the absorbed atom to convert it to a plus.", "Use a dark plus to fuse two atoms, whether or not those two are the same.", "To use a neutrino, tap on any other atom to duplicate it.", "The game ends when there are 18 atoms in the ring. Tap the 'x' to start playing.", ""];
+var elements = [
+    [["Plus Atom", "Minus Atom", "Dark Plus", "Neutrino", "Luxon", "Antimatter"], ["+", "-", "+", " ", " ", " "], 0, [color(225, 70, 60), color(80, 100, 225), color(35, 35, 35), color(255, 255, 255), color(25, 255, 125), color(255, 255, 255)], ["Combines identical atoms together.", "Absorbs atoms, which may then be turned into a plus.", "Combines any two atoms together, even if they are not the same.", "Duplicates a selected atom.", "Only found in Geneva mode. It temporarily converts any atom into a plus.", "Sorry, not yet available."]],
+    ["Hydrogen", "H", 1, color(99, 185, 213)],
+    ["Helium", "He", 2, color(209, 201, 145)],
+    ["Lithium", "Li", 3, color(76, 97, 104)],
+    ["Beryllium", "Be", 4, color(200, 200, 200)],
+    ["Boron", "B", 5, color(125, 83, 83)],
+    ["Carbon", "C", 6, color(59, 59, 59)],
+    ["Nitrogen", "N", 7, color(44, 198, 178)],
+    ["Oxygen", "O", 8, color(111, 236, 152)],
+    ["Fluorine", "F", 9, color(236, 196, 111)],
+    ["Neon", "Ne", 10, color(190, 0, 134)],
+    ["Sodium", "Na", 11, color(230, 157, 122)],
+    ["Magnesium", "Mg", 12, color(158, 128, 234)],
+    ["Aluminum", "Al", 13, color(121, 121, 121)],
+    ["Silicon", "Si", 14, color(74, 64, 112)],
+    ["Phosphorus", "P", 15, color(215, 70, 63)],
+    ["Sulfur", "S", 16, color(55, 94, 124)],
+    ["Chlorine", "Cl", 17, color(109, 29, 123)],
+    ["Argon", "Ar", 18, color(154, 61, 165)],
+    ["Potassium", "K", 19, color(77, 137, 70)],
+    ["Calcium", "Ca", 20, color(240, 240, 240)],
+    ["Scandium", "Sc", 21, color(95, 187, 119)],
+    ["Titanium", "Ti", 22, color(90, 90, 90)],
+    ["Vanadium", "V", 23, color(95, 158, 187)],
+    ["Chromium", "Cr", 24, color(164, 136, 181)],
+    ["Manganese", "Mn", 25, color(220, 74, 74)],
+    ["Iron", "Fe", 26, color(171, 150, 125)],
+    ["Cobalt", "Co", 27, color(67, 113, 230)],
+    ["Nickel", "Ni", 28, color(186, 195, 149)],
+    ["Copper", "Cu", 29, color(185, 87, 57)],
+    ["Zinc", "Zn", 30, color(180, 180, 180)],
+    ["Galium", "Ga", 31, color(57, 185, 117)],
+    ["Germanium", "Ge", 32, color(151, 146, 115)],
+    ["Arsenic", "As", 33, color(115, 132, 152)],
+    ["Selenium", "Se", 34, color(66, 66, 66)],
+    ["Bromine", "Br", 35, color(212, 117, 60)],
+    ["Krypton", "Kr", 36, color(60, 160, 212)],
+    ["Rubidium", "Rb", 37, color(210, 44, 31)],
+    ["Strontium", "Sr", 38, color(255, 157, 41)],
+    ["Yttrium", "Y", 39, color(177, 41, 255)],
+    ["Zirconium", "Zr", 40, color(200, 215, 40)],
+    ["Niobium", "Nb", 41, color(117, 220, 235)],
+    ["Molybdenum", "Mo", 42, color(139, 163, 140)],
+    ["Technetium", "Tc", 43, color(238, 161, 226)],
+    ["Ruthenium", "Ru", 44, color(86, 62, 50)],
+    ["Rhodium", "Rh", 45, color(136, 209, 122)],
+    ["Palladium", "Pd", 46, color(158, 171, 190)],
+    ["Silver", "Ag", 47, color(220, 220, 220)],
+    ["Cadmium", "Cd", 48, color(85, 96, 200)],
+    ["Indium", "In", 49, color(64, 141, 60)],
+    ["Tin", "Sn", 50, color(181, 164, 124)],
+    ["Antimony", "Sb", 51, color(198, 89, 140)],
+    ["Tellurium", "Te", 52, color(130, 116, 152)],
+    ["Iodine", "I", 53, color(255, 0, 252)],
+    ["Xenon", "Xe", 54, color(120, 136, 255)],
+    ["Caesium", "Cs", 55, color(255, 212, 120)],
+    ["Barium", "Ba", 56, color(233, 156, 156)],
+    ["Lanthanum", "La", 57, color(139, 219, 190)],
+    ["Cerium", "Ce", 58, color(255, 147, 41)],
+    ["Praseodymium", "Pr", 59, color(86, 224, 25)],
+    ["Neodymium", "Nd", 60, color(101, 137, 141)],
+    ["Promethium", "Pm", 61, color(46, 233, 155)],
+    ["Samarium", "Sm", 62, color(189, 100, 117)],
+    ["Europium", "Eu", 63, color(108, 100, 189)],
+    ["Gadolinium", "Gd", 64, color(110, 18, 137) ],
+    ["Terbium", "Tb", 65, color(53, 156, 80)],
+    ["Dysprosium", "Dy", 66, color(68, 126, 231)],
+    ["Holmium", "Ho", 67, color(231, 125, 70)],
+    ["Erbium", "Er", 68, color(191, 73, 135)],
+    ["Thulium", "Tm", 69, color(33, 66, 107)],
+    ["Ytterbium", "Yb", 70, color(135, 135, 80)],
+    ["Lutetium", "Lu", 71, color(209, 44, 44)],
+    ["Hafnium", "Hf", 72, color(145, 209, 44)],
+    ["Tantalum", "Ta", 73, color(127, 135, 175)],
+    ["Tungsten", "W", 74, color(43, 106, 165)],
+    ["Rhenium", "Re", 75, color(81, 47, 47)],
+    ["Osmium", "Os", 76, color(48, 112, 96)],
+    ["Iridium", "Ir", 77, color(201, 135, 106)],
+    ["Platinum", "Pt", 78, color(80, 80, 8)],
+    ["Gold", "Au", 79, color(237, 196, 116)],
+    ["Mercury", "Hg", 80, color(128, 165, 172)],
+    ["Thalium", "Tl", 81, color(172, 128, 137)],
+    ["Lead", "Pb", 82, color(60, 124, 102)],
+    ["Bismuth", "Bi", 83, color(255, 5, 6)],
+    ["Polonium", "Po", 84, color(255, 255, 0)],
+    ["Astatine", "At", 85, color(0, 255, 0)],
+    ["Radon", "Rn", 86, color(218, 232, 58)],
+    ["Francium", "Fr", 87, color(255, 108, 0)],
+    ["Radium", "Ra", 88, color(0, 255, 255)],
+    ["Actinium", "Ac", 89, color(66, 73, 24)],
+    ["Thorium", "Th", 90, color(170, 61, 130)],
+    ["Protactinium", "Pa", 91, color(61, 170, 130)],
+    ["Uranium", "U", 92, color(156, 255, 0)],
+    ["Neptunium", "Np", 93, color(0, 174, 255)],
+    ["Plutonium", "Pu", 94, color(255, 144, 0)],
+    ["Americium", "Am", 95, color(129, 51, 73)],
+    ["Curium", "Cm", 96, color(255, 121, 208)],
+    ["Berkelium", "Bk", 97, color(174, 135, 126)],
+    ["Californium", "Cf", 98, color(143, 60, 180)],
+    ["Einsteinium", "Es", 99, color(134, 196, 220)],
+    ["Fermium", "Fm", 100, color(191, 220, 134)],
+    ["Mendelevium", "Md", 101, color(220, 134, 134)],
+    ["Nobelium", "No", 102, color(255, 117, 101)],
+    ["Lawrencium", "Lr", 103, color(92, 36, 160)],
+    ["Rutherfordium", "Rf", 104, color(107, 102, 117)],
+    ["Dubnium", "Db", 105, color(176, 80, 50)],
+    ["Seaborgium", "Sg", 106, color(37, 73, 135)],
+    ["Bohrium", "Bh", 107, color(155, 175, 160)],
+    ["Hassium", "Hs", 108, color(255, 86, 45)],
+    ["Meitnerium", "Mt", 109, color(205, 205, 44)],
+    ["Darmstadtium", "Ds", 110, color(58, 126, 72)],
+    ["Roentgenium", "Rg", 111, color(0, 0, 255)],
+    ["Copernicium", "Cn", 112, color(170, 69, 148)],
+    ["Nihonium", "Nh", 113, color(143, 143, 143)],
+    ["Flerovium", "Fl", 114, color(46, 237, 230)],
+    ["Moscovium", "Mc", 115, color(190, 175, 100)],
+    ["Livermorium", "Lv", 116, color(242, 46, 106)],
+    ["Tennessine", "Ts", 117, color(112, 234, 120)],
+    ["Oganesson", "Og", 118, color(255, 0, 185)],
+    ["Bananium", "Bn", 119, color(237, 230, 116)],
+    ["GravityBlockium", "Gb", 120, color(61, 230, 195)],
+    ["BreakingBadium", "Bb", 121, color(48, 145, 65)],
+    ["314159265359", "Pi", 122, color(77, 200, 230)],
+    ["Sirnicanium", "Sir", 123, color(255, 0, 0)],
+    ["Earthium", "Ea", 124, color(17, 119, 245)],
+    ["Darkium", "", 125, color(0, 0, 0)],
+];
+//}
+
+//dust for special effects XD
+//{
+var Dust = function(type, x, y){
+    this.type = type;
+    this.x = x;
+    this.y = y;
+    this.vel = [random(-1, 1)/3, random(-1, 1)/3];
+    this.trans = random()*150;
+    this.orig = this.trans;
+};
+Dust.prototype.draw = function() {
+    if(this.trans<this.orig*2/3){
+        stroke(255, this.trans);
+        strokeWeight(1);
+        fill(elements[this.type][3], this.trans*2);
+        ellipse(this.x, this.y, this.trans/15, this.trans/15);
+        fill(0, this.trans/4);
+        ellipse(this.x, this.y, this.trans/15, this.trans/15);
+    }
+    
+    this.x+=this.vel[0];
+    this.y+=this.vel[1];
+    this.trans--;
+};
+var dust = [];
+//}
+
+//a ton of variables concerning the atoms
+//{
+var maxAtom = 1, nextSubtype = 0, minAtom = maxAtom;
+var nextSubGen = random(0, 3600), nextAtom = round(random(1, maxAtom));
+var leastChecker = 0;
+var moveCounter = 0, prevMovC = 0, moveMod = round(random(0, 3))+3;
+var highscore = [0, 0, 0], least = 0, high = 1, overallHigh = 1, highest = [1, 1, 1];
+var score = 0, M = 1, R = 1, addScore = 0, Bonus = 0;
+var checker = 0, pluses = 0, itSaysSo = false;
+var mode = 0, gameOver = false;
+var countDown = 5, timer = 20, rate = 0.01611;
+var notLuxon = false;
+//}
+
+//atom object and table AKA ring of atoms
+//{
+var Table = [], extraAtom = [], add = 0;
+var Atom = function(type, angle, subtype){
+    //classification
+    this.type = type;
+    this.origType = type;
+    this.subtype = subtype;
+    this.origSub = false;
+    if(this.subtype===3){
+        this.Sub = true;    
+    }
+    this.combine = false;
+    if(type===0){
+        if(this.subtype===0||this.subtype===2){
+            this.combine = true; 
+        }
+    }
+    this.turnBack = 0;
+    
+    //regarding position
+    this.angle = angle%360;
+    while(this.angle<0){
+        this.angle+=360;
+    }
+    this.actualangle = this.angle;
+    this.x = 0;
+    this.y = 0;
+    this.Rad = tableRad;
+    this.rad = 0;
+    
+    //special effects
+    this.bounce = 180;
+    this.actualbounce = 0;
+    this.increaseSize = 0;
+    this.glow = 0;
+};
+Atom.prototype.display = function(){
+    if(this.type===0){
+        switch(this.subtype){
+            case 3:
+                for(var i=0; i<4; i++){
+                    fill(255, atomSize-(i*15+this.glow)%atomSize);
+                    ellipse(this.x, this.y, atomSize+this.increaseSize+5+(i*15+this.glow)%atomSize, atomSize+this.increaseSize+5+(i*15+this.glow)%atomSize);
+                }
+            break;
+            case 4:
+                for(var i=0; i<9; i++){
+                    pushMatrix();
+                        translate(this.x, this.y);
+                        rotate(i*40+this.glow);
+                        fill(elements[this.type][3][this.subtype], 100+sin((i%3)*120+this.glow*6)*50);
+                        ellipse(0, atomSize/2+10+this.increaseSize, 8, 8);
+                    popMatrix();
+                }
+            break;
+            case 5:
+                
+            break;
+            default:
+                for(var i=0; i<=5; i++){
+                    noStroke();
+                    fill(elements[this.type][3][this.subtype], 160-((i+this.glow)%(atomSize*2))*2);
+                    ellipse(this.x, this.y, (i+this.glow)%(atomSize*2)+this.increaseSize, (i+this.glow)%(atomSize*2)+this.increaseSize);
+                    ellipse(this.x, this.y, (i+this.glow)%(atomSize*2)+this.increaseSize-atomSize, (i+this.glow)%(atomSize*2)+this.increaseSize-atomSize);
+                }
+                for(var i=0; i<constrain(this.turnBack-moveCounter, 0, this.turnBack); i++){
+                    pushMatrix();
+                        translate(this.x, this.y);
+                        rotate(i*360/constrain(this.turnBack-moveCounter, 0, this.turnBack)+this.glow);
+                        fill(elements[this.type][3][this.subtype], 100+sin((i%3)*120+this.glow*6)*50);
+                        ellipse(0, atomSize/2+10+this.increaseSize, 8, 8);
+                    popMatrix();
+                }
+            break;
+        }
+        
+        noStroke();
+        fill(elements[this.type][3][this.subtype]);
+        ellipse(this.x, this.y, atomSize+this.increaseSize, atomSize+this.increaseSize);
+        
+        stroke(elements[this.type][3][this.subtype]);
+        strokeWeight(2);
+        fill(elements[this.type][3][this.subtype]);
+        ellipse(this.x, this.y, atomSize-1+this.increaseSize, atomSize-1+this.increaseSize);
+        
+        noStroke();
+        fill(0, 25);
+        ellipse(this.x, this.y, atomSize-3+this.increaseSize, atomSize-3+this.increaseSize);
+        
+        pushMatrix();
+            translate(this.x, this.y);
+            scale((atomSize+this.increaseSize)/atomSize);
+            
+            textFont(C, atomSize*9/23);
+            fill(255);
+            text(elements[this.type][1][this.subtype], 0, 0);
+            if(this.type>0){
+                textFont(C, atomSize/4.5);
+                text(elements[this.type][2][this.subtype], 0, atomSize/3.2);
+            }
+        popMatrix();
+    } else {
+        noStroke();
+        fill(elements[this.type][3]);
+        ellipse(this.x, this.y, atomSize+this.increaseSize, atomSize+this.increaseSize);
+        
+        stroke(elements[this.type][3]);
+        strokeWeight(2);
+        fill(elements[this.type][3]);
+        ellipse(this.x, this.y, atomSize-1+this.increaseSize, atomSize-1+this.increaseSize);
+        
+        noStroke();
+        fill(0, 25);
+        ellipse(this.x, this.y, atomSize-3+this.increaseSize, atomSize-3+this.increaseSize);
+        
+        pushMatrix();
+            translate(this.x, this.y);
+            scale((atomSize+this.increaseSize)/atomSize);
+            
+            textFont(C, atomSize*9/23);
+            fill(255);
+            text(elements[this.type][1], 0, 0);
+            if(this.type>0){
+                fill(255, 180);
+                textFont(C, atomSize/4.5);
+                text(elements[this.type][2], 0, atomSize/3.2);
+            }
+        popMatrix();    
+    }
+};
+Atom.prototype.animate = function(){
+    this.actualangle-=(this.actualangle-this.angle)/6;
+    this.rad-=(this.rad-this.Rad)/6;
+    this.x = cos(this.actualangle)*this.rad;
+    this.y = sin(this.actualangle)*this.rad;
+    
+    if((dist(this.x, this.y, cos(this.angle)*this.rad, sin(this.angle)*this.rad)<=atomSize/5&&this.actualbounce<this.bounce&&abs(this.rad-tableRad)<=atomSize)||this.combine){
+        this.actualbounce-=(this.actualbounce-this.bounce)/5;
+    }
+    if(this.subtype!==4){
+        this.increaseSize = sin(this.actualbounce)*10;
+    } else {
+        if(this.Rad!==0){
+            this.increaseSize-=(this.increaseSize+atomSize)/8;
+        }
+    }
+    
+    if(this.subtype===0||this.subtype===2||this.subtype===3||this.subtype===4){
+        this.glow++;
+    } else {
+        this.glow--;
+    }
+    
+    if(mouseIsPressed&&verify===0&&dist(mouseX, mouseY, this.x+width/2, this.y+height/2+50)<=atomSize/2&&this.type!==0&&this.origSub&&extraAtom.length===0){
+        nextAtom = 0;
+        this.origSub = false;
+    }
+    if(mouseIsPressed&&verify===0&&dist(mouseX, mouseY, this.x+width/2, this.y+height/2+50)<=atomSize/2&&nextSubtype===3&&this.Rad!==0&&extraAtom.length===0){
+        nextAtom = this.type;
+        nextSubtype = 0;
+        this.origSub = false;
+        verify++;
+    }
+    if(mouseIsPressed&&verify===0&&dist(mouseX, mouseY, this.x+width/2, this.y+height/2+50)<=atomSize/2&&nextSubtype===4&&this.Rad!==0){
+        extraAtom.push(new Atom(0, this.angle, 4));
+    }
+    if(moveCounter===this.turnBack&&checker===Table.length&&this.type===0){
+        this.type = this.origType;
+        this.turnBack = 0;
+    }
+    
+    if(this.type>this.origType){
+        this.origType = this.type;    
+    }
+    
+    if(this.type>highest[mode]&&tutorial>=tDialogues.length-1){
+        highest[mode]++;    
+    }
+    if(this.type>high&&tutorial>=tDialogues.length-1){
+        if(checker===Table.length){
+            high = this.type;
+        }
+    }
+    if(this.type>overallHigh&&tutorial>=tDialogues.length-1){
+        overallHigh = this.type;    
+    }
+};
+//}
+
+//reset stuff
+//{
+for(var i=0; i<6; i++){
+    Table.push(new Atom(round(random(constrain(maxAtom-5, 0, 5), maxAtom))+1, i*360/6, 0));
+}
+var Reset = function(){
+    tableRad = (width/2-atomSize*3/2);
+    timer = 20;
+    countDown = 5;
+    
+    maxAtom = 2;
+    nextSubtype = 0;
+    minAtom = maxAtom;
+    nextSubGen = random(0, 3600);
+    nextAtom = round(random(1, maxAtom));
+    
+    moveCounter = 0;
+    prevMovC = 0;
+    moveMod = round(random(0, 3))+3;
+    
+    least = 0;
+    high = 1;
+    score = 0;
+    
+    Table = [];
+    for(var i=0; i<6; i++){
+        Table.push(new Atom(round(random(constrain(maxAtom-5, 0, 5), maxAtom))+1, i*360/6, 0));    
+    }
+    gameOver = false;
+};
+//}
+
+//modes and scenes
+//{
+//modes
+//{
+var scene = 0;
+var modes = ["Classic", "Time Attack", "Geneva"];
+//}
+
+//menu parts
+//{
+var scroll = [0, 0], sel = 0, select = ["SPECIAL ATOMS", "ELEMENTS"];
+var Settings = function(){
+    fill(255, 255, 255);
+    textFont(A, 60);
+    text("SETTINGS", 0, -250);
+    
+    textAlign(LEFT, CENTER);
+    textFont(A, 40);
+    text("SOUND", -145, -150);
+    text("LAG", -145, -80);
+    text("RESET GAME", -145, -10);
+    textAlign(CENTER, CENTER);
+    
+    for(var i=0; i<settings.length; i++){
+        if(settings[i]){
+            stroke(120, 255, 160);
+            fill(120, 255, 160, 200);
+        } else {
+            stroke(255, 240);
+            fill(255, 200);
+        }
+        strokeWeight(4);
+        ellipse(130, i*70-150, atomSize, atomSize);
+        noStroke();
+        
+        if(mouseIsPressed&&verify===0&&dist(mouseX, mouseY, 130+width/2, i*70-150+height/2+50)<=atomSize/2){
+            settings[i] = !settings[i];
+        }
+    }
+    
+    if(settings[2]){
+        settings[2] = false;
+        Program.restart();
+    }
+};
+var Info = function(){
+    fill(255, 255, 255);
+    textFont(A, 60);
+    text("INFO", 0, -250);
+    
+    textFont(A, 30);
+    text("BY : ARROWHEAD CO.", 0, -150);
+    text("BASED ON THE GAME", 0, -80);
+    text("ATOMAS BY SIRNIC", 0, -35);
+};
+var Almanac = function(){
+    for(var i=0; i<10; i++){
+        fill(255, 4);
+        noStroke();
+        rect(-width/2, -35-i*3-10, width, i*6+20);    
+    }
+    if(sel===1){
+        textAlign(LEFT, CENTER);
+        for(var i=1; i<elements.length; i++){
+            fill(255, 255/(abs(i-1-scroll[0])*4+1));
+            textFont(A, 30);
+            textAlign(RIGHT, CENTER);
+            text(i, -100, (i-scroll[0])*35-70);
+            textAlign(LEFT, CENTER);
+            fill(elements[i][3], 255/(abs(i-1-scroll[0])*4+1));
+            text("["+elements[i][1]+"]", -85, (i-scroll[0])*35-70);
+            text(elements[i][0].toUpperCase(), -20, (i-scroll[0])*35-70);
+        }
+        textAlign(CENTER, CENTER);
+    } else {
+        for(var i=0; i<elements[0][0].length; i++){
+            fill(255, 255/(abs(i-scroll[0])*4+1));
+            textFont(A, 30);
+            textAlign(RIGHT, CENTER);
+            text(i+1, -65, (i-scroll[0])*35-35);
+            textAlign(LEFT, CENTER);
+            fill(elements[0][3][i], 255/(abs(i-scroll[0])*4+1));
+            text(elements[0][0][i].toUpperCase(), -50, (i-scroll[0])*35-35);
+        }
+        textAlign(CENTER, CENTER);
+    }
+    
+    for(var i=0; i<10; i++){
+        noFill();
+        strokeWeight(2);
+        stroke(0, i*10);
+        rect(-width/2, -50-i*2, width, 35+i*4);
+        noStroke();
+    }
+    fill(68, 38, 40);
+    rect(-width/2, 4, width, height/2-55);
+    rect(-width/2, -344, width, height/2-25);
+    
+    fill(255, 255, 255);
+    textFont(A, 60);
+    text("ALMANAC", 0, -250);
+    textFont(A, 20);
+    text("USE ⬇️ OR ⬆️ KEYS", 0, 35);
+    
+    if(sel===0){
+        textAlign(LEFT, TOP);
+        fill(255);
+        textFont(A, 28);
+        text(elements[0][4][scroll[1]].toUpperCase(), -180, 60, 360, 150);
+        
+        textAlign(CENTER, CENTER);    
+    } else {
+        
+    }
+    
+    for(var i=0; i<2; i++){
+        if(i===sel){
+            stroke(120, 255, 160);
+            fill(120, 255, 160, 200);
+        } else {
+            stroke(255, 240);
+            fill(255, 200);
+        }
+        rect(-140+i*160, -200, 120, 40);
+        
+        fill(255);
+        textFont(A, 18);
+        text(select[i], -80+160*i, -180);
+        
+        if(mouseIsPressed&&verify===0&&mouseX>60+i*160&&mouseX<180+i*160&&mouseY>150&&mouseY<190){
+            sel = i;
+            scroll[1] = 0;
+        }
+    }
+    
+    if(keyCode===UP&&verify===0&&keyIsPressed){
+        if(scroll[1]>0){
+            scroll[1]--;    
+        }
+    }
+    if(keyCode===DOWN&&verify===0&&keyIsPressed){
+        if(sel===0){
+            if(scroll[1]<elements[0][0].length-1){
+                scroll[1]++;    
+            }
+        } else {
+            if(scroll[1]<elements.length-2){
+                scroll[1]++;    
+            }
+        }
+    }
+    scroll[0]-=(scroll[0]-scroll[1])/6;
+};
+var Leaderboard = function(){
+    fill(255, 255, 255);
+    textFont(A, 60);
+    text("LEADERBOARD", 0, -250);
+    
+    fill(255);
+    textFont(A, 11);
+    for(var i=0; i<leaderboard.length; i++){
+        for(var j=0; j<leaderboard[i].length; j++){
+            text((j+1)+". "+leaderboard[i][j], i*135-135, -120+j*20);    
+        }
+        text(modes[i].toUpperCase(), i*135-135, -185);
+        text("YOU : "+highscore[i], i*135-135, -160);
+    }
+};
+//}
+
+//menu
+//{
+var slidex = [0, 0], slidexMax = [[-2*width, 2*width], [-2*width, 0]];
+var slidey = [0, 0];
+var electrons = [random()*360, random()*360, random()*360];
+var displayAtom = function(Hatom, Hscore, x, y, type){
+    pushMatrix();
+    translate(x, y);
+        for(var i=0; i<3; i++){
+            pushMatrix();
+                translate(0, -50);
+                rotate(120*i+30);
+                
+                noFill();
+                stroke(255, 100);
+                arc(0, 0, 100, 250, -60, 60);
+            popMatrix();
+        }
+        for(var i=0; i<electrons.length; i++){
+            if(electrons[i]%360>180){
+                pushMatrix();
+                    translate(0, -50);
+                    rotate(120*i);
+                    
+                    noStroke();
+                    fill(elements[Hatom][3]);
+                    ellipse(cos(electrons[i])*125, sin(electrons[i])*50, 15, 15);
+                popMatrix();    
+            }
+            electrons[i]+=0.5;
+        }
+        
+        for(var i=0; i<20; i++){
+            noStroke();
+            fill(elements[Hatom][3], 40-i*2);
+            ellipse(0, -50, 100+i*10, 100+i*10);    
+        }
+        fill(elements[Hatom][3]);
+        ellipse(0, -50, 160, 160);
+        for(var i=0; i<=16; i++){
+            noFill();
+            stroke(50, 5*i-40);
+            strokeWeight(5);
+            ellipse(0, -50, i*10-5, i*10-5);
+            noStroke();
+        }
+        
+        if(type!==0){
+            fill(255);
+            textFont(D, 75);
+            text(Hscore, 0, -65);
+            textFont(A, 25);
+            text(elements[Hatom][0].toUpperCase(), 0, -5);
+        } else {
+            fill(255);
+            textFont(A, 75);
+            text(elements[Hatom][1], 0, -65);
+            textFont(A, 25);
+            text(elements[Hatom][2], 0, -5);
+        }
+        
+        for(var i=0; i<3; i++){
+            pushMatrix();
+                translate(0, -50);
+                rotate(120*i+30);
+                
+                noFill();
+                stroke(255, 100);
+                strokeWeight(3);
+                arc(0, 0, 100, 250, 60, 300);
+            popMatrix();
+        }
+        for(var i=0; i<electrons.length; i++){
+            if(electrons[i]%360<=180){
+                pushMatrix();
+                    translate(0, -50);
+                    rotate(120*i);
+                    
+                    noStroke();
+                    fill(elements[Hatom][3]);
+                    ellipse(cos(electrons[i])*125, sin(electrons[i])*50, 15, 15);
+                    fill(0, 50);
+                    ellipse(cos(electrons[i])*125, sin(electrons[i])*50, 15, 15);
+                popMatrix();    
+            }
+        }
+    popMatrix();
+};
+var menu = function(){
+    pushMatrix();
+        translate(slidex[0], slidey[0]);
+    
+        fill(255, 255, 255);
+        textFont(A, 60);
+        text("ATOMAS", 0, -250);
+        
+        displayAtom(overallHigh, highscore[0], 0, 0, 0);
+        
+        fill(255);
+        textFont(A, 40);
+        text("START", 0, 125);
+        
+        for(var i=0; i<modes.length; i++){
+            pushMatrix();
+                translate(i*width, height);
+                
+                displayAtom(highest[i], highscore[i], 0, 0, 1);
+                
+                fill(255);
+                textFont(A, 40);
+                text("PLAY", 0, 125);
+                
+                if(slidey[1]===-height){
+                    if(mouseX>150+i*width+slidex[0]&&mouseX<250+i*width+slidex[0]&&mouseY>450&&mouseY<500){
+                        if(mouseIsPressed&&verify===0){
+                            if(i===0){
+                                mode = i;
+                                scene = 1;
+                            }
+                            if(i===1&&highscore[0]>=1000){
+                                mode = i;
+                                scene = 1;
+                            }
+                            if(i===2&&highscore[0]>=10000){
+                                mode = i;
+                                scene = 1;
+                            }
+                            paused = false;
+                            Reset();
+                        }
+                    }
+                }
+                if(i===1){
+                    if(highscore[0]<1000){
+                        noStroke();
+                        fill(0, 180);
+                        rect(-width/2, -height/2-50, width, height);
+                        
+                        textFont(A, 30);
+                        text("🔒", 0, -190);
+                        
+                        fill(255);
+                        textFont(A, 25);
+                        text("SCORE 1000 IN CLASSIC TO UNLOCK THIS MODE", -100, -170, 200, 250);
+                    }
+                }
+                if(i===2){
+                    if(highscore[0]<10000){
+                        noStroke();
+                        fill(0, 180);
+                        rect(-width/2, -height/2-50, width, height);
+                        
+                        textFont(A, 30);
+                        text("🔒", 0, -190);
+                        
+                        fill(255);
+                        textFont(A, 25);
+                        text("SCORE 10000 IN CLASSIC TO UNLOCK THIS MODE", -100, -170, 200, 250);
+                    }
+                }
+                
+                fill(255, 255, 255);
+                textFont(A, 60);
+                text(modes[i].toUpperCase(), 0, -250);
+            popMatrix();
+        }
+        
+        pushMatrix();
+            translate(-width*(round(slidex[0]/width)), 0);
+            switch(round(slidex[0]/width)+2){
+                case 4:
+                    Settings();
+                break;
+                case 3:
+                    Info();
+                break;
+                case 1:
+                    Almanac();
+                break;
+                case 0:
+                    Leaderboard();
+                break;
+            }
+        popMatrix();
+    popMatrix();
+
+    noStroke();
+    fill(255, constrain(5000/dist(mouseX, mouseY, 0, 300), 0, 200));
+    ellipse(-200, -50, 70, 70);
+    fill(255, constrain(5000/dist(mouseX, mouseY, 400, 300), 0, 200));
+    ellipse(200, -50, 70, 70);
+    
+    fill(0, 50);
+    textFont(P, 40);
+    text("<", -185, -50);
+    text(">", 185, -50);
+
+    pushMatrix();
+        translate(0, slidey[0]);
+        for(var i=0; i<5; i++){
+            fill(255, 50);
+            ellipse(i*16-32, 180, 10, 10);    
+        }
+        for(var i=0; i<3; i++){
+            fill(255, 50);
+            ellipse(i*16-16, 780, 10, 10);    
+        }
+        pushMatrix();
+            translate(-slidex[1]/width*16, 0);
+            fill(255, 150);
+            ellipse(0, 180, 10, 10);
+        popMatrix();
+        pushMatrix();
+            translate(-slidex[1]/width*16-16, 0);
+            fill(255, 150);
+            ellipse(0, 780, 10, 10);
+        popMatrix();
+    popMatrix();
+
+    if(mouseIsPressed&&verify===0){
+        if(dist(mouseX, mouseY, 0, 300)<=35&&slidex[1]<slidexMax[(height-slidey[1])/height-1][1]){
+            slidex[1]+=width;
+        }
+        if(dist(mouseX, mouseY, 400, 300)<=35&&slidex[1]>slidexMax[(height-slidey[1])/height-1][0]){
+            slidex[1]-=width;
+        }
+    }
+
+    if(slidey[1]===0){
+        if(mouseX>150&&mouseX<250&&mouseY>450&&mouseY<500&&slidey[1]===0&&slidex[1]===0){
+            if(mouseIsPressed&&verify===0){
+                slidey[1]-=height;    
+                slidex = [0, 0];
+            }
+        }
+    }
+
+    pushMatrix();
+        translate(0, -slidey[0]-600);
+        noStroke();
+        fill(255, constrain(5000/dist(mouseX, mouseY, 200, 0), 0, 200));
+        ellipse(0, -350, 100, 100);
+        
+        fill(0, 50);
+        textFont(P, 90);
+        text("^", 0, -315);
+    popMatrix();
+    
+    if(mouseIsPressed&&verify===0){
+        if(dist(mouseX, mouseY, 200, 0)<=50&&slidey[1]===-height){
+            slidey[1]+=height;
+            slidex = [0, 0];
+        }
+    }
+    
+    slidex[0]-=(slidex[0]-slidex[1])/10;
+    slidey[0]-=(slidey[0]-slidey[1])/10;
+};
+//}
+
+//some preliminary variables and functions
+//{
+var test = [(i+1)%Table.length, i-1];
+var Next = function(){
+    if(abs(moveCounter-prevMovC)>=moveMod){
+        moveMod = round(random(0, 3))+2;
+        prevMovC = moveCounter;
+        nextAtom = 0;
+        nextSubGen = random(0, 3600);
+    } else {
+        if(abs(minAtom-maxAtom)<5){
+            nextAtom = round(random(minAtom, maxAtom));
+        } else {
+            nextAtom = round(random(minAtom, minAtom+3));
+        }
+    }
+};
+var user = "", start = 0;
+
+var Paused = function(){
+    fill(0, 180);
+    rect(-width/2, -height/2-50, width, height);
+    
+    textFont(C, 40);
+    fill(255);
+    text("✖", 0, -50);
+    if(dist(mouseX, mouseY, width/2, height/2)<=20){
+        if(mouseIsPressed){
+            paused = false;    
+        }
+    }
+    
+    fill(255);
+    ellipse(0, 80, 140, 140);
+    ellipse(0, -180, 140, 140);
+    fill(0, 180);
+    textFont(C, 100);
+    text("≡", 0, -180);
+    text("↻", 0, 78);
+    if(mouseIsPressed){
+        if(dist(mouseX, mouseY, 200, 170)<=70){
+            Reset();
+            scene = 0 ;
+        } else if (dist(mouseX, mouseY, 200, 428)<=70){
+            Reset();
+            paused = false;
+        }
+    }
+};
+var GameOver = function(){
+    textFont(A, 35);
+    if(mouseY>250&&mouseY<315){
+        fill(150, 150, 150);
+        if(mouseIsPressed&&verify===0){
+            username = ["ENTER NAME"];    
+        }
+    } else {
+        fill(100, 100, 100);
+    }
+
+    user = "";
+    start = 0;
+    if(username.length!==1&&username[0]==="ENTER NAME"){
+        start = 1;    
+    }
+    for(var i=start; i<username.length; i++){
+        user+=username[i];
+    }
+    text(user, 0, -70);
+    textFont(A, 30);
+    
+    if(mouseY>410&&mouseY<450&&mouseX>130&&mouseX<270){
+        fill(255, 80, 80);
+        if(mouseIsPressed&&verify===0){
+            Reset();    
+        }
+    } else {
+        fill(250, 40, 40);
+    }
+    
+    text("NEW GAME", 0, 80);
+};
+var Portray = new Atom(0, 0, 0);
+
+var Done = function(){
+    fill(100, 255, 100, 180);
+    ellipse(0, 0, 150, 150);
+    tCount2++;
+    textFont(A, 100);
+    fill(255);
+    text("✔", 0, 0);
+    if(tCount2>50){
+        tutorial++;    
+        tCount = 0;
+        tCount2 = 0;
+        if(tutorial>=tDialogues.length-1){
+            Reset();
+        }
+    }
+};
+var guide = 0, guides = [[-40, 125], [105, 75], [-107, 68], [-133, 0], [0, 0], [117, 66], [133, 0], [-95, 95], [0, 0]];
+var Guide = function(x, y){
+    fill(250, 50, 50, 100);
+    ellipse(x, y, atomSize+sin(guide)*5, atomSize+sin(guide)*5);
+    fill(0, 0, 0, 50+sin(guide)*25);
+    textFont(A, 30);
+    text("✖", x, y);
+    guide+=5;
+};
+var Tutorial = function(){
+    switch(tutorial){
+        case 0:
+            if(tCount<=1){
+                Table = [new Atom(4, 0, 0), new Atom(3, 60, 0), new Atom(2, 120, 0), new Atom(8, 180, 0), new Atom(6, 240, 0)];
+                nextAtom = 4;
+            }
+            if(Table.length>=6&&checker===Table.length){
+                Done();
+            }
+        break;
+        case 1:
+            if(tCount<=1){
+                Table = [new Atom(3, 0, 0), new Atom(3, 60, 0), new Atom(5, 120, 0), new Atom(8, 180, 0), new Atom(1, 240, 0)];
+                nextAtom = 0;
+            }
+            if(Table.length===4&&checker===Table.length){
+                Done();
+            }
+        break;
+        case 2:
+            if(tCount<=1){
+                Table = [new Atom(7, 0, 0), new Atom(3, 30, 0), new Atom(3, 60, 0), new Atom(2, 90, 0), new Atom(3, 120, 0), new Atom(3, 150, 0), new Atom(2, 180, 0), new Atom(3, 210, 0), new Atom(3, 240, 0), new Atom(4, 270, 0), new Atom(1, 300, 0)];
+                nextAtom = 0;
+            }
+            if(Table.length===4&&checker===Table.length){
+                Done();
+            }
+        break;
+        case 3:
+            if(tCount<=1){
+                Table = [new Atom(21, 0, 0), new Atom(7, 60, 0), new Atom(15, 120, 0), new Atom(11, 180, 0), new Atom(19, 240, 0), new Atom(16, 300, 0)];
+                nextAtom = 0;
+                nextSubtype = 1;
+            }
+            if(Table.length===5&&checker===Table.length){
+                Done();
+            }
+        break;
+        case 4:
+            if(Table.length===5&&checker===Table.length&&nextAtom===0){
+                Done();
+            }
+        break;
+        case 5:
+            if(tCount<=1){
+                Table = [new Atom(90, 0, 0), new Atom(81, 60, 0), new Atom(93, 120, 0), new Atom(89, 180, 0), new Atom(85, 240, 0), new Atom(92, 300, 0)];
+                nextAtom = 0;
+                nextSubtype = 2;
+            }
+            if(Table.length===5&&checker===Table.length){
+                Done();
+            }
+        break;
+        case 6:
+            if(tCount<=1){
+                Table = [new Atom(44, 0, 0), new Atom(47, 60, 0), new Atom(53, 120, 0), new Atom(48, 180, 0), new Atom(51, 240, 0), new Atom(45, 300, 0)];
+                nextAtom = 0;
+                nextSubtype = 3;
+            }
+            if(Table.length===6&&checker===Table.length&&nextAtom!==0){
+                Done();
+            }
+        break;
+        case 7:
+            if(tCount<=1){
+                Table = [new Atom(26, 0, 0), new Atom(23, 60, 0), new Atom(27, 60, 0), new Atom(29, 60, 0)];
+                nextAtom = 25;
+            }
+            if(Table.length===5&&checker===Table.length){
+                Done();
+            }
+        break;
+        case 8:
+        break;
+    }
+    fill(255);
+    textFont(A, 40);
+    text("TUTORIAL "+(tutorial+1)+"/"+(tDialogues.length-1), -160, -410, 320, 200);
+    textFont(A, 20);
+    text(tDialogues[tutorial].toUpperCase(), -160, -330, 320, 200);
+    
+    if(checker===Table.length&&tCount2<1){
+        Guide(guides[tutorial][0], guides[tutorial][1]);
+    }
+    
+    tCount++;
+};
+var Gtut = true;
+var GenevaTutorial = function(){
+    fill(0, 180);
+    rect(-width/2, -height/2-50, width, height);
+    
+    fill(255);
+    textFont(A, 60);
+    text("GENEVA", 0, -250);
+    textFont(A, 20);
+    text("INSTEAD OF PLUS ATOMS, LUXONS SPAWN IN THIS MODE. TO USE THEM, SIMPLY TAP ON ANY OTHER ATOM. THE TAPPED ATOM WILL THEN BECOME A PLUS FOR ONE ROUND.", -175, -200, 350, 250);
+    
+    stroke(255, 200);
+    fill(255, 150);
+    rect(-100, 50, 200, 50);
+    noStroke();
+    fill(0);
+    textFont(A, 40);
+    text("OK", -180, -57, 360, 250);
+    
+    if(mouseIsPressed&&mouseX>100&&mouseX<300&&mouseY>400&&mouseY<450){
+        Gtut = false;    
+    }
+};
+//}
+//display the game
+//{
+var drawTable = function(){
+    if(paused){
+        verify=10;    
+    }
+    
+    noFill();
+    if(Portray.type===0){
+        stroke(elements[Portray.type][3][Portray.subtype], 200);
+    } else {
+        stroke(elements[Portray.type][3], 200);    
+    }
+    strokeWeight(2);
+    ellipse(0, 0, tableRad*2+atomSize*3/2, tableRad*2+atomSize*3/2);
+    stroke(0, 50);
+    ellipse(0, 0, tableRad*2+atomSize*3/2, tableRad*2+atomSize*3/2);
+    
+    for(var i=0; i<20; i++){
+        if(Portray.type===0){
+            fill(elements[Portray.type][3][Portray.subtype], 2);
+        } else {
+            fill(elements[Portray.type][3], 2);    
+        }
+        noStroke();
+        ellipse(0, 0, atomSize*2+tableRad/10*i, atomSize*2+tableRad/10*i);    
+    }
+    
+    if(mode!==1){
+        Portray.Rad = 0;
+        Portray.type = nextAtom;
+        Portray.subtype = nextSubtype;
+        Portray.display();
+        Portray.animate();
+    } else {
+        if(countDown<=0){
+            Portray.Rad = 0;
+            Portray.type = nextAtom;
+            Portray.subtype = nextSubtype;
+            Portray.display();
+            Portray.animate();
+        } else {
+            fill(250, 40, 40);
+            if(round(countDown)>0){
+                textFont(D, 30);
+                text(round(countDown), 0, 0);    
+            } else {
+                textFont(A, 30);
+                text("GO", 0, 0);
+            }
+        }
+    }
+    
+    checker = 0;
+    pluses = 0;
+    minAtom = maxAtom;
+    leastChecker = maxAtom;
+    for(var i=0; i<Table.length; i++){
+        if(Table[i].type<leastChecker&&Table[i].type!==0){
+            leastChecker = Table[i].type;
+        }
+        if(Table[i].type<minAtom&&Table[i].type!==0){
+            minAtom = Table[i].type;
+        }
+        if(abs(Table[i].angle-Table[i].actualangle)<=0.5&&abs(Table[i].Rad-Table[i].rad)<=5){
+            checker++;
+        }
+        if(Table[i].type===0){
+            pluses++;
+        }
+    }
+    if(leastChecker>least&&tutorial>=tDialogues.length-1){
+        least++;    
+    }
+    if(minAtom>least-1){
+        minAtom = constrain(least-3, 1, maxAtom);
+    }
+    if(abs(minAtom-maxAtom)<=1){
+        minAtom = constrain(minAtom-4, 1, maxAtom);    
+    }
+    
+    if(!gameOver){
+        if(moveCounter%21!==10){
+            if(moveCounter%21===12){
+                Next();
+                moveCounter++;
+            }
+            
+            if(nextAtom===0){
+                if(mode===2&&!notLuxon){
+                    nextSubtype = 4;    
+                }
+                if(score>750){
+                    if(nextSubGen>=1045&&nextSubGen<=1190){
+                        nextSubtype = 2;
+                        nextSubGen = random(0, 3600);
+                    }
+                }
+                if(score>1500){
+                    if(nextSubGen>=2120&&nextSubGen<=2280){
+                        nextSubtype = 3;
+                        nextSubGen = random(0, 3600);
+                    }
+                }
+            }
+        } else {
+            nextAtom = 0;
+            nextSubtype = 1;
+        }
+    }
+    
+    for(var i=0; i<Table.length; i++){
+        Table[i].display();
+        Table[i].animate();
+        Table[i].angle = (i*360/Table.length);
+        
+        itSaysSo = Table[i].combine;
+        
+        if(Table[i].combine&&Table.length>3){
+            test = [(i+1)%Table.length, i-1];
+            if(i-1<0){
+                test[1]+=Table.length;
+            }
+            
+            if((Table[test[0]].type===Table[test[1]].type||Table[i].subtype===2)&&Table[test[0]].type!==0&&test[0]!==test[1]){
+                if(abs(Table[i].angle-Table[i].actualangle)<=0.5){
+                    if(abs(Table[i].angle-Table[test[0]].angle)>=abs(Table[i].angle-360-Table[test[0]].angle)&&Table[i].angle%360!==0){
+                        Table[test[0]].angle = Table[i].angle-360;
+                    } else if(Table[i].angle%360===0){
+                        if(Table[test[0]].angle>180){
+                            Table[test[0]].angle = 360;
+                        } else {
+                            Table[test[0]].angle = 0;
+                        }
+                    } else {
+                        Table[test[0]].angle = Table[i].angle;
+                    }
+                    if(abs(Table[i].angle-Table[test[1]].angle)>=abs(Table[i].angle-360-Table[test[1]].angle)){
+                        Table[test[1]].angle = Table[i].angle-360;
+                    } else if(Table[i].angle%360===0){
+                        if(Table[test[1]].angle>180){
+                            Table[test[1]].angle = 360;
+                        } else {
+                            Table[test[1]].angle = 0;
+                        }
+                    } else {
+                        Table[test[1]].angle = Table[i].angle;
+                    }
+                    
+                    if(dist(Table[i].x, Table[i].y, Table[test[0]].x, Table[test[0]].y)<=atomSize/5){
+                        Table[test[0]].rad = 10000;
+                        Table[test[1]].rad = 10000;
+                        Table[i].bounce+=360;
+                        
+                        if(mode===1){
+                            timer+=2;    
+                        }
+                        
+                        if(Table[i].type===0){
+                            if(Table[i].subtype===2){
+                                Table[i].type = max(Table[test[0]].type, Table[test[1]].type)+3;
+                            } else {
+                                Table[i].type = Table[test[0]].type+1;
+                            }
+                        } else if(Table[i].type<=Table[test[0]].type){
+                            Table[i].type=Table[test[0]].type+2;
+                        } else {
+                            Table[i].type++;
+                        }
+                        
+                        Table[i].subtype = 0;
+                        M+=0.5;
+                        R+=0.5;
+                        if(Table[i].subtype===2){
+                            addScore = floor(M*(Table[test[0]].type+Table[test[1]].type)/2);
+                        } else {
+                            addScore = floor(M*(Table[i].type));
+                        }
+                        if(Table[test[0]].type>=Table[i].type){
+                            Bonus = 2*M*(Table[test[0]].type-Table[i].type+1);
+                        } else {
+                            Bonus = 0;    
+                        }
+                        score+=addScore+Bonus;
+                    }
+                }
+            } else {
+                if(Table[i].type!==0){
+                    timer+=1;
+                    Table[i].combine = false;
+                    M = 1;
+                }
+            }
+        } else if(Table[i].type!==0){
+            Table[i].combine = false;
+        }
+        
+        if(itSaysSo&&!Table[i].combine){
+            for(var j=0; j<20*R; j++){
+                dust.push(new Dust(Table[i].type, cos(Table[i].angle)*tableRad, sin(Table[i].angle)*tableRad));    
+            }
+            if(Table[i].type-1>maxAtom){
+                maxAtom++;
+            }
+            R = 1;
+        }
+        
+        if(Table[i].rad>1000||(Table[i].Rad===0&&Table[i].rad<atomSize/2)){
+            if(gameOver){
+                for(var j=0; j<10*R; j++){
+                    dust.push(new Dust(Table[i].type, 0, 0));    
+                }
+            }
+            Table.splice(i, 1);    
+        }
+        
+        if(!gameOver&&checker===Table.length&&extraAtom.length===0&&verify===0&&tutorial>=tDialogues.length-1||(tutorial<tDialogues.length-1&&checker===Table.length&&tCount2===0&&dist(mouseX, mouseY, guides[tutorial][0]+width/2, guides[tutorial][1]+height/2+50)<=atomSize/2+10)){
+            if((nextSubtype===0||nextSubtype===2)&&dist(mouseX, mouseY, Portray.x+width/2, Portray.y+height/2+50)>=atomSize){
+                if(mouseX>=width/2){
+                    if(atan((mouseY-height/2-50)/(mouseX-width/2))<0){
+                        add = 360;    
+                    } else {
+                        add = 0;    
+                    }
+                    if(atan((mouseY-height/2-50)/(mouseX-width/2))+add>i*360/Table.length&&atan((mouseY-height/2-50)/(mouseX-width/2))+add<(i+1)*360/Table.length){
+                        if(mouseIsPressed&&verify===0){
+                            var part1 = Table.slice(0, (i+1)%Table.length);
+                            var part2 = Table.slice((i+1)%Table.length);
+                            part1.push(new Atom(nextAtom, (((i+1)%Table.length)*360/Table.length), nextSubtype));
+                            Table = part1.concat(part2);
+                            
+                            Next();
+                            
+                            notLuxon = false;
+                            moveCounter++;
+                            verify++;
+                        }
+                    }
+                } else {
+                    if(atan((mouseY-height/2-50)/(mouseX-width/2))-180<0){
+                        add = 360;    
+                    } else {
+                        add = 0;    
+                    }
+                    if(atan((mouseY-height/2-50)/(mouseX-width/2))-180+add>i*360/Table.length&&atan((mouseY-height/2-50)/(mouseX-width/2))-180+add<(i+1)*360/Table.length){
+                        if(mouseIsPressed&&verify===0){
+                            var part1 = Table.slice(0, (i+1)%Table.length);
+                            var part2 = Table.slice((i+1)%Table.length);
+                            
+                            part1.push(new Atom(nextAtom, (((i+1)%Table.length)*360/Table.length), nextSubtype));
+                            Table = part1.concat(part2);
+                            
+                            Next();
+                            
+                            notLuxon = false;
+                            moveCounter++;
+                            verify++;
+                        }
+                    }
+                }
+            } else {
+                if(nextSubtype===1){
+                    if(dist(Table[i].x+width/2, Table[i].y+height/2+50, mouseX, mouseY)<=atomSize/2&&mouseIsPressed&&verify===0){
+                        nextSubtype = 0;
+                        Portray.origSub = true;
+                        nextAtom = Table[i].type;
+                        Table[i].Rad = 0;
+                        notLuxon = true;
+                        
+                        moveCounter++;
+                        verify++;
+                    }
+                }
+            }
+        }
+    }
+    
+    for(var i=0; i<dust.length; i++){
+        dust[i].draw(); 
+        if(dust[i].trans<=0){
+            dust.splice(i, 1);
+        }
+    }
+    
+    if((Table.length>=18&&checker===Table.length)||(mode===1&&timer<=0)){
+        gameOver = true;    
+    }
+    if(gameOver){
+        if(Table.length>0&&checker===Table.length){
+            Table[round(random(0, Table.length-1))].Rad = 0;
+            score+=Table[round(random(0, Table.length-1))].type;
+            nextAtom=high;
+        }
+        if(tableRad>=-atomSize){
+            tableRad-=0.4;
+        }
+        
+        timer = 0;
+    }
+    
+    for(var i=0; i<extraAtom.length; i++){
+        extraAtom[i].display();
+        extraAtom[i].animate();
+        for(var j=0; j<Table.length; j++){
+            if(dist(Table[j].x, Table[j].y, extraAtom[i].x, extraAtom[i].y)<=atomSize/2){
+                Table[j].type = 0;
+                Table[j].combine = true;
+                if(Table[j].turnBack===0){
+                    Table[j].turnBack = moveCounter+1;
+                } else {
+                    Table[j].turnBack = moveCounter+1;
+                }
+            }
+        }
+        if(abs(extraAtom[i].rad-extraAtom[i].Rad)<=atomSize/2){
+            nextSubtype = 0;
+            Next();
+            extraAtom.splice(i, 1);    
+        }
+    }
+    
+    if(abs(Table.length-18)<=3&&!gameOver){
+        for(var i=0; i<abs(Table.length-18); i++){
+            noStroke();
+            fill(255-abs(Table.length-18)*255/3, abs(Table.length-18)*255/3-85, 0);
+            ellipse(i*15-(abs(Table.length-18)-1)/2*15, -180, 10, 10);
+            fill(255, 70);
+            ellipse(i*15-(abs(Table.length-18)-1)/2*15, -180, 10, 10);
+        }
+    }
+};
+var drawInfo = function(){
+    pushMatrix();
+        translate(0, -175-tableRad/4);
+        scale(abs((width/2-atomSize*3/2)/(constrain(tableRad, 0, (width/2-atomSize*3/2))+(width/20-atomSize*3/20)))/20+0.9);
+        
+        fill(255);
+        textFont(D, 50);
+        text(score, 0, -10);
+        if(mode!==1){
+            fill(elements[high][3]);
+            textFont(A, 35);
+            text(elements[high][0].toUpperCase(), 0, -55);
+            fill(255, 25);
+            textFont(A, 35);
+            text(elements[high][0].toUpperCase(), 0, -55);
+        } else {
+            fill(255);
+            textFont(A, 35);
+            text(round(timer)+" s", 0, -55);
+        }
+    popMatrix();
+    
+    if(mouseX<40&&mouseY<50){
+        fill(255, 150);
+        if(mouseIsPressed){
+            paused = true;    
+        }
+    } else {
+        fill(255, 100);
+    }
+    rect(-190, -340, 8, 30);
+    rect(-175, -340, 8, 30);
+    
+    if(mode===1){
+        if(countDown>0){
+            countDown-=rate;    
+        } else {
+            if(!gameOver){
+                timer-=rate;    
+            }
+        }
+    }
+    
+    if(gameOver&&Table.length===0){
+        GameOver();    
+    }
+    if(paused){
+        Paused();    
+    }
+    
+    if(Gtut&&mode===2){
+        GenevaTutorial();    
+    }
+    
+    highscore[mode] = max(score, highscore[mode]);
+};
+//}
+//}
+
+//standard functions
+//{
+draw = function() {
+    pushMatrix();
+        translate(width/2, height/2+50);
+        background(30, 40, 50);
+        
+        switch(scene){
+            case 0:
+                menu();
+            break;
+            case 1:
+                drawTable();
+                if(tutorial<=tDialogues.length-2){
+                    Tutorial();    
+                } else {
+                    drawInfo();
+                }
+            break;
+        }
+        
+        //{
+        if(mouseIsPressed&&mouseX===0&&mouseY===0){
+            thumbnail = get(0, 0, width, height);    
+        }
+        if(thumbnail!==0){
+            fill(255, 255, 255);
+            rect(-width/2, -height/2-50, width, height);
+            image(thumbnail, width/6-width/2, -height/2-50, width*2/3, height);    
+        }
+        //}
+        
+        verify++;
+    popMatrix();
+};
+
+mouseReleased = function(){
+    verify = 0;    
+};
+
+var allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?1234567890+-;/@#$%^&*()=_| ";
+allowedChars = allowedChars.split("");
+keyPressed = function(){
+    if(username[0]==="ENTER NAME"){
+        for(var i in allowedChars){
+            if(allowedChars[i]===key.toString()){
+                username.push(key.toString());    
+            }
+        }
+        if (keyCode===8&&username.length>1){
+            username.splice(username.length-1);
+        }
+    }
+    if(user==="MeitnerUpdate"){
+        highest = [92, 92, 92];
+        overallHigh = 92;
+    }
+    
+    verify = 0;
+};
+//}
+};
+main();
+//end of code
