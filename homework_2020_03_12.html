@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Homework 2020-03-12</title>
+</head>
+<body>
+<pre>
+  -1. Finish questions 11 and 17, 19 from prior homework
+  0. Give the answers to this homework as an HTML document.
+  1. Use Desmos to draw the patchwork triangle. — use this for hints: https://learn.desmos.com/points
+  2. Is it possible to have a triangle with sides of length 21, 34, 89?
+  3. Is it possible to have a triangle with sides of length 34, 89, 21?
+  4. Is it possible to have a triangle with sides of length 89, 21, 34?
+  5. Write a JavaScript function is_triangle(a, b, c) that returns true if the values for a, b, c can successfully form a triangle, false otherwise.
+  6. Sort this JavaScript array:  [55, 610, 1, 1597, 2, 144, 233, 987, 3, 6765, 1, 8, 34, 89, 13, 4181, 377, 21, 2584, 0, 5]
+  7. Try to find the square root of 2 by writing this function: function f(x) { return x*x } -- Try f(1.42) and then refine your values until you get f(x) giving 2 as exactly as possible.  What answer do you get?
+  8. Use the distributive property: (β+1)(β-1)
+  9. Use the distributive property: (β^2+1)(β^2-1)
+  10. Use the distributive property: (β^99+1)(β^99-1)
+  11. Use the distributive property: (x⁴+1)(x²+1)(x+1)(x-1)
+  12. Use the distributive property: (1+2i+3j-7k)(10-20i+30j-40k)
+  13. Use the distributive property: (1+2i)(1-3i)(2jj-45)(j+11)(ij+1)
+  14. Spend 40 minutes to an hour watching Wes Bos videos.  Pause the videos at appropriate moments.  Write down ten key facts or ideas you've had between pauses.
+  15. Look at this website and screenshot 7 different triangles:  https://www.calculator.net/right-triangle-calculator.html The way it works is you leave a few values blank and it will fill in the rest!  Try several variations.  Write a brief description about what you observe.
+  16. Current atmospheric CO₂ level is about 413.02 parts per million (ppm) measured by the daily high from Feb. 26th at Mauna Loa. That is roughly 133.02 ppm higher than the pre-industrial level at around 1750, before people started burning coal to power trains and industrial machines.  How many percent higher are we now than we were at the start of the industrial revolution?
+  17. Is addition commutative?
+  18. Is multiplication commutative?
+  19. Is subtraction commutative?
+  20. Is division commutative?
+  2. Look up "mathematical closure" and describe it briefly.
+  21. Are the counting numbers closed under addition? (Counting numbers: 1, 2, 3, 4, ...)
+  22. Are the integers closed under addition?
+  23. Are the counting numbers closed under multiplication?
+  24. Are the integers closed under multiplication?
+  25. Are the counting numbers closed under subtraction?
+  26. Are the integers closed under subtraction?
+  27. Are the counting numbers closed under division?
+  28. Are the integers closed under division?
+  29. For each of the following sets of counting numbers, give a yes or no as to whether the two numbers are relatively prime (look up "relatively prime" if you need to).
+  30. {11, 24}
+  31. {11, 100}
+  32. {11, 121}
+  33. {11, 19}
+  34. {12, 16}
+  35. {13, 16}
+  36. {13, 169}
+  37. {21, 22}
+  38. {21, 27}
+  39. Find checkmate in one for the diagram below.  Explain why this is checkmate.
+  40. Write down the numbers from one to ten in binary.
+  41. Convert 30 from base 10 to base 16
+  42. Convert 40 from base 10 to base 16
+  43. Convert AA from base 16 to base 10
+  44. Convert AB from base 16 to base 10
+  45. Use geogebra.org to draw a picture with 10 to 20 distinct objects on it and show a screenshot.
+  46. Explain this video/article:  https://www.kottke.org/20/03/heres-what-a-googol-to-one-gear-ratio-looks-like
+  47. Explain what this web page illustrates:  https://www.geogebra.org/m/P686SvSP
+  48. Look back to the homework from Saturday Feb 1, problem 13.  Write a function almost exactly like what you see there, but call it table_of_x_squared_minus_one and modify the code so that it graphs x²-1 instead of just x².  Then graph your result on a single large sheet of graph paper, just like you graphed the function x² that time.  Suggestion:  put the x-axis an inch or two above the bottom of the paper; if you put it at the bottom you might run into trouble fitting your graph on the page.
+  7². For this question, look at the code snippet below for the logResult function, and refer to mathjs.org.  What does math.evaluate do?  What does math.equal do?  What does math.pickRandom do?  What is the intent of line 33?
+  50.  Using our experimental value of pi=3.18, suppose you have a dinner plate with a diameter of 8 and 3/4 inches.  What would be its circumference to the nearest quarter inch?
+
+  -1. Finish questions 11 and 17, 19 from prior homework
+19600=2*2*2*2*5*5*7*7 =2^4*5^2*7^2
+
+0. Give the answers to this homework as an HTML document.
+This doc
+
+1. Use Desmos to draw the patchwork triangle. — use this for hints: https://learn.desmos.com/points
+https://www.desmos.com/calculator/i0qvqmff2g
+</pre>
+<img src="file:///C:/Users/Alex/Documents/patchwork_triangle.png" alt="Patchwork Triangle">
+<pre>
+  2. Is it possible to have a triangle with sides of length 21, 34, 89?
+no because the first 2 are not more than the 3rd when added up
+
+3. Is it possible to have a triangle with sides of length 34, 89, 21?
+no because it is the same triangle as before.
+
+4. Is it possible to have a triangle with sides of length 89, 21, 34?
+no because it is the same triangle as before.
+
+5. Write a JavaScript function is_triangle(a, b, c) that returns true if the values for a, b, c can successfully form a triangle, false otherwise.
+function triangle(a, b, c) {
+  if ((a + b <= c) || (a + c <= b) || (b + c <= a)) {
+    return false;
+  }
+  else {
+    if ((a <= 0) || (b <= 0) || (c <= 0)) {
+    return false;
+    }
+    else {
+    return true;
+    }
+  }
+}
+
+6. Sort this JavaScript array:  [55, 610, 1, 1597, 2, 144, 233, 987, 3, 6765, 1, 8, 34, 89, 13, 4181, 377, 21, 2584, 0, 5]
+[0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765]
+
+7. Try to find the square root of 2 by writing this function: function f(x) { return x*x } -- Try f(1.42) and then refine your values until you get f(x) giving 2 as exactly as possible.  What answer do you get?
+f(1.41421356237309503)= (roughly) 1.9999999999999996.
+this is the limit of the accuracy of the floating point numbers in JavaScript.
+
+8. Use the distributive property: (β+1)(β-1)
+β(β-1)+1(β-1)
+ββ-β+β-1
+ββ-1
+
+9. Use the distributive property: (β^2+1)(β^2-1)
+ββ(ββ-1)+1(ββ-1)
+ββββ-ββ+ββ-1
+ββββ-1
+
+10. Use the distributive property: (β^99+1)(β^99-1)
+β^198-1
+
+10b. Use the distributive property: (x+y)(x-y)
+(x+y)(x-y)
+x(x-y)+y(x-y)
+xx-xy+xy-yy
+xx-yy
+
+29. For each of the following sets of counting numbers, give a yes or no as to whether the two numbers are relatively prime (look up "relatively prime" if you need to).
+30. {11, 24}
+yes
+
+31. {11, 100}
+yes
+
+32. {11, 121}
+no
+
+33. {11, 19}
+yes
+
+34. {12, 16}
+no
+
+35. {13, 16}
+yes
+
+36. {13, 169}
+no
+
+37. {21, 22}
+yes
+
+38. {21, 27}
+no
+
+</pre>
+</body>
